@@ -1,0 +1,74 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# biosampleR
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of biosampleR is to provide a simple set of functions to
+generate common biodiversity measures from count data, along with
+confidence intervals around these measures using bootstrapping. The
+package also provides functions to assess the effect of sampling effort
+on the precision of these measures.
+
+## Installation
+
+You can install the development version of biosampleR from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("csim063/biosampleR")
+```
+
+Or you can install the stable version of biosampleR from
+[CRAN](https://cran.r-project.org/) with (the package is not yet on
+CRAN):
+
+``` r
+install.packages("biosampleR")
+```
+
+## Example
+
+The the functions in the package may be used in a single workflow as
+follows:
+
+``` r
+library(biosampleR)
+
+# Import count data
+df <- BCI #Using the BCI dataset from the vegan package as an example
+
+# Calculate biodiversity measures with confidence intervals
+# (both per site and overall for all sites)
+stats <- get_sample_stats(df)
+
+# Generate subsamples of a data frame with a number of sites between a minimum
+# and maximum value.
+ss <- generate_subsamples(df,
+                          min_sites = 1,
+                          max_sites = 5,
+                          step = 1,
+                          reps = 2)
+
+# Calculate change in variance of biodiversity measures with increasing sampling effort
+data  <- unlist(ss, recursive = FALSE)
+data <- do.call(rbind, data)
+
+calc_delta_var(data,
+              col_name = "richness",
+            site_name = "num_sites",
+          rep_name = "rep",
+        visualize = TRUE)
+```
+
+## Code of Conduct
+
+Please note that the **spectre** package is released with a Contributor
+Code of Conduct. By contributing to this project, you agree to abide by
+its terms.
+
+To see how to contribute to this project, please see the Contributing
+guidelines.
